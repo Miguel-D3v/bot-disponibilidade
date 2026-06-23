@@ -1,0 +1,21 @@
+{
+  "name": "bot_disponibilidade",
+  "version": "1.0.0",
+  "description": "automoção de tarefa para whatsapp",
+  "keywords": [
+    "bot",
+    "nodejs",
+    "automoção"
+  ],
+  "license": "ISC",
+  "author": "Miguel Modesto",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.34.7"
+  }
+}
