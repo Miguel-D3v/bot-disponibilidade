@@ -1,5 +1,9 @@
 import pkg from "whatsapp-web.js";
 import qrcode from "qrcode-terminal";
+import fs from "fs";
+
+const dadosPessoais = JSON.parse(fs.readFileSync("./config/dados-pessoais.json", "utf-8"));
+const disponibilidade = JSON.parse(fs.readFileSync("./config/disponibilidade.json", "utf-8"));
     
 const { Client, LocalAuth } = pkg;
 
@@ -20,6 +24,27 @@ client.on("ready", async () => {
     console.log("Bot conectado!");
 
 });
+function formatarData(dataISO) {
+    const [ano, mes, dia] = dataISO.split("-");
+    return `${dia}/${mes}/${ano}`;
+}
+ disponibilidade.datasDisponiveis = disponibilidade.datasDisponiveis.map(formatarData);
+
+function gerarLegenda() {
+    return `
+NOME: ${dadosPessoais.Nome}
+CPF: ${dadosPessoais.CPF}
+ALTURA: ${dadosPessoais.Altura}
+GRANDES EVENTOS: ${dadosPessoais["Grandes Eventos"]}
+VENCIMENTO ATA: ${dadosPessoais["Vencimento Ata"]}
+BAIRRO: ${dadosPessoais.Bairro}
+TEL: ${dadosPessoais.Telefone}
+PIX: ${dadosPessoais.Pix}
+
+DISPONÍVEL: ${disponibilidade.datasDisponiveis.join(", ")}
+`;
+}
+
 
  client.on("message_create", async (message) => {
     try {
