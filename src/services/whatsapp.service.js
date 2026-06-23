@@ -31,6 +31,7 @@ export async function processarMensagem(
             env.fotoPath
         );
 
+   try {
     await client.sendMessage(
         env.grupoEdge,
         foto,
@@ -38,4 +39,17 @@ export async function processarMensagem(
             caption: gerarLegenda()
         }
     );
+
+    console.log(
+        `[${new Date().toLocaleString("pt-BR")}] 📤 DISPONIBILIDADE ENVIADA`
+    );
+
+    } catch (error) {
+
+    console.error(
+        `[${new Date().toLocaleString("pt-BR")}] ❌ ERRO AO ENVIAR`,
+        error
+       );
+
+    }
 }
