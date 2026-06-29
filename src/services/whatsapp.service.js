@@ -9,47 +9,64 @@ export async function processarMensagem(
     env
 ) {
 
-    if (message.from !== env.grupoEdge) return;
+    console.log("==============================");
+console.log("FROM:", message.from);
+console.log("GRUPO ENV:", env.grupoEdge);
+console.log("AUTHOR:", message.author);
+console.log("==============================");
 
-    if (message.author !== env.matheusId) return;
+    if (message.from !== env.grupoEdge) {
+        console.log("❌ Grupo diferente");
+        return;
+    }
 
-    if (ultimaMensagem === message.id.id) return;
+    console.log("✅ Grupo correto");
+
+    if (message.author !== env.matheusId) {
+        console.log("❌ Autor diferente");
+        return;
+    }
+
+    console.log("✅ Autor correto");
+
+    if (ultimaMensagem === message.id.id) {
+        console.log("❌ Mensagem duplicada");
+        return;
+    }
 
     ultimaMensagem = message.id.id;
 
+    console.log("✅ Mensagem inédita");
+
     const texto = message.body.toUpperCase();
 
-    if (!texto.includes("PEÇO A DISPONIBILIDADE"))
+    if (!texto.includes("PEÇO A DISPONIBILIDADE")) {
+        console.log("❌ Texto não identificado");
         return;
+    }
 
-    console.log(
-        "🚨 DISPONIBILIDADE DETECTADA"
-    );
+    console.log("🚨 DISPONIBILIDADE DETECTADA");
 
-    const foto =
-        MessageMedia.fromFilePath(
-            env.fotoPath
+    const foto = MessageMedia.fromFilePath(env.fotoPath);
+
+    try {
+
+        await client.sendMessage(
+            env.grupoEdge,
+            foto,
+            {
+                caption: gerarLegenda()
+            }
         );
 
-   try {
-    await client.sendMessage(
-        env.grupoEdge,
-        foto,
-        {
-            caption: gerarLegenda()
-        }
-    );
-
-    console.log(
-        `[${new Date().toLocaleString("pt-BR")}] 📤 DISPONIBILIDADE ENVIADA`
-    );
+        console.log(
+            `[${new Date().toLocaleString("pt-BR")}] ✅ DISPONIBILIDADE ENVIADA`
+        );
 
     } catch (error) {
 
-    console.error(
-        `[${new Date().toLocaleString("pt-BR")}] ❌ ERRO AO ENVIAR`,
-        error
-       );
+        console.error("❌ Erro ao enviar:");
+        console.error(error);
 
     }
 }
